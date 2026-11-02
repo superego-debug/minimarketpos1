@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f6f2">
+    <meta name="description" content="Hệ thống quản lý siêu thị mini và hóa đơn bán lẻ.">
+    <title>Chợ Nhỏ — Quản lý bán hàng</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#" aria-label="Chợ Nhỏ POS">
+          <span class="brand-mark">c.</span>
+          <span class="brand-name">chợ nhỏ<span>MINI MARKET</span></span>
+        </a>
+        <div class="store-switch"><span class="store-icon">⌂</span><span><b>Cửa hàng trung tâm</b><small>Chi nhánh 01 · Đang mở</small></span><span class="chevron">⌄</span></div>
+        <div class="nav-label">BÁN HÀNG</div>
+        <nav class="navigation" aria-label="Điều hướng chính">
+          <button class="nav-item active" data-view="pos"><span class="nav-icon">▦</span>Tạo hóa đơn</button>
+          <button class="nav-item" data-view="products"><span class="nav-icon">▤</span>Sản phẩm <span class="nav-count" id="nav-product-count">0</span></button>
+          <button class="nav-item" data-view="invoices"><span class="nav-icon">▧</span>Hóa đơn</button>
+        </nav>
+        <div class="nav-label report-label">TỔNG QUAN</div>
+        <button class="nav-item" data-view="dashboard"><span class="nav-icon">◷</span>Báo cáo bán hàng</button>
+        <div class="sidebar-bottom">
+          <div class="help-card"><span class="help-spark">✳</span><b>Cần hỗ trợ?</b><p>Liên hệ với quản lý cửa hàng khi bạn cần trợ giúp.</p><a href="mailto:hello@example.com">Trung tâm trợ giúp <span>↗</span></a></div>
+          <div class="profile"><div class="avatar">AN</div><span><b>An Nguyễn</b><small>Thu ngân · Ca sáng</small></span><button aria-label="Tùy chọn tài khoản">···</button></div>
+        </div>
+      </aside>
+
+      <main class="main-area">
+        <header class="topbar"><div class="breadcrumbs">Cửa hàng <span>/</span> <b id="crumb-view">Tạo hóa đơn</b></div><div class="topbar-actions"><span class="connection"><i></i> Đã lưu trên máy</span><span class="top-date" id="current-date"></span><button class="icon-button" aria-label="Thông báo">♧<i class="notification-dot"></i></button></div></header>
+
+        <section class="view active" id="view-pos">
+          <div class="page-heading"><div><div class="eyebrow" id="shift-label">CA SÁNG</div><h1>Tạo hóa đơn <span class="wave">✳</span></h1><p>Bắt đầu bán hàng — mọi thứ đã sẵn sàng.</p></div><button class="button button-outline" id="reset-sale">↻ <span>Đơn mới</span></button></div>
+          <div class="pos-layout">
+            <section class="catalog-panel">
+              <div class="catalog-toolbar"><div class="search-wrap"><span>⌕</span><input id="product-search" type="search" placeholder="Tìm tên sản phẩm, mã SKU..." autocomplete="off"><kbd>⌘ K</kbd></div><button class="filter-button" id="category-filter">Tất cả sản phẩm <span>⌄</span></button></div>
+              <div class="category-row" id="category-chips"></div>
+              <div class="catalog-meta"><b id="catalog-count">0 sản phẩm</b><span>Giá niêm yết chưa bao gồm VAT</span></div>
+              <div class="product-grid" id="product-grid"></div>
+            </section>
+            <aside class="cart-panel">
+              <div class="cart-heading"><div><h2>Đơn hàng <span class="order-number" id="order-number">#001</span></h2><p id="cart-item-label">Chưa có sản phẩm</p></div><button class="text-button" id="clear-cart">Xóa hết</button></div>
+              <div class="customer-field"><span class="customer-avatar">♙</span><div><b>Khách lẻ</b><small>Khách hàng mặc định</small></div><button id="choose-customer" aria-label="Chọn khách hàng">⌄</button></div>
+              <div class="cart-items" id="cart-items"><div class="empty-cart"><span>▤</span><b>Đơn hàng đang trống</b><small>Chọn sản phẩm để bắt đầu thêm vào hóa đơn.</small></div></div>
+              <div class="cart-footer">
+                <div class="discount-row"><span>Mã giảm giá</span><button class="discount-button" id="discount-button">＋ Thêm mã</button></div>
+                <label class="tax-row"><span>Thuế VAT</span><span class="tax-control"><input id="tax-rate" type="number" min="0" max="100" step="1" value="8" aria-label="Thuế VAT phần trăm"><span>%</span></span></label>
+                <div class="summary-row"><span>Tạm tính</span><b id="subtotal">0 ₫</b></div>
+                <div class="summary-row"><span>Thuế VAT <small id="tax-caption">(8%)</small></span><b id="tax-amount">0 ₫</b></div>
+                <div class="total-row"><span>Tổng thanh toán</span><b id="total">0 ₫</b></div>
+                <button class="button button-primary checkout-button" id="checkout-button" disabled><span>Thanh toán</span><b id="checkout-total">0 ₫</b><span>→</span></button>
+                <div class="secure-note"><span>♧</span> Giao dịch được ghi nhận an toàn</div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="view-products">
+          <div class="page-heading"><div><div class="eyebrow">KHO HÀNG</div><h1>Sản phẩm</h1><p>Quản lý danh mục và tồn kho cửa hàng.</p></div><button class="button button-primary" id="add-product-button">＋ Thêm sản phẩm</button></div>
+          <div class="stats-row" id="product-stats"></div>
+          <div class="table-card"><div class="table-toolbar"><div class="search-wrap table-search"><span>⌕</span><input id="inventory-search" type="search" placeholder="Tìm sản phẩm..."></div><span class="table-hint" id="inventory-count"></span></div><div class="table-scroll"><table><thead><tr><th>SẢN PHẨM</th><th>MÃ SKU</th><th>GIÁ BÁN</th><th>TỒN KHO</th><th>TRẠNG THÁI</th><th></th></tr></thead><tbody id="inventory-body"></tbody></table></div></div>
+        </section>
+
+        <section class="view" id="view-invoices">
+          <div class="page-heading"><div><div class="eyebrow">GIAO DỊCH</div><h1>Hóa đơn</h1><p>Lịch sử các giao dịch bán lẻ gần đây.</p></div></div>
+          <div class="stats-row" id="invoice-stats"></div>
+          <div class="table-card"><div class="table-toolbar"><div class="search-wrap table-search"><span>⌕</span><input id="invoice-search" type="search" placeholder="Tìm theo mã hóa đơn..."></div><span class="table-hint" id="invoice-count"></span></div><div class="table-scroll"><table><thead><tr><th>MÃ HÓA ĐƠN</th><th>THỜI GIAN</th><th>THU NGÂN</th><th>SẢN PHẨM</th><th>TỔNG THANH TOÁN</th><th>TRẠNG THÁI</th><th></th></tr></thead><tbody id="invoice-body"></tbody></table></div></div>
+        </section>
+
+        <section class="view" id="view-dashboard">
+          <div class="page-heading"><div><div class="eyebrow">TỔNG QUAN</div><h1>Báo cáo bán hàng</h1><p>Tình hình kinh doanh tại cửa hàng của bạn.</p></div><span class="date-pill">◷ <span>Hôm nay</span></span></div>
+          <div class="stats-row dashboard-stats" id="dashboard-stats"></div>
+          <div class="dashboard-grid"><div class="table-card chart-card"><div class="card-title-row"><div><h2>Doanh thu gần đây</h2><p>7 ngày vừa qua</p></div><span class="chart-legend"><i></i> Doanh thu</span></div><div class="chart-area" id="sales-chart"></div></div><div class="table-card top-products"><div class="card-title-row"><div><h2>Sắp hết hàng</h2><p>Sản phẩm cần nhập thêm</p></div><button class="text-button" data-go="products">Xem kho →</button></div><div id="low-stock-list"></div></div></div>
+        </section>
+        <footer class="footer"><span>© 2025 Chợ Nhỏ POS</span><span>Đơn giản hóa bán hàng mỗi ngày <b>✳</b></span></footer>
+      </main>
+    </div>
+
+    <div class="modal-backdrop" id="product-modal" hidden><form class="modal" id="product-form"><div class="modal-heading"><div><span class="eyebrow">DANH MỤC</span><h2 id="product-modal-title">Thêm sản phẩm</h2></div><button type="button" class="modal-close" data-close="product-modal" aria-label="Đóng">×</button></div><input type="hidden" id="edit-product-id"><label>Tên sản phẩm<input id="product-name" required maxlength="79" placeholder="Ví dụ: Cà phê rang xay"></label><label>Mã SKU<input id="product-sku" required maxlength="31" placeholder="Ví dụ: CF-001"></label><div class="form-grid"><label>Giá bán (₫)<input id="product-price" type="number" required min="1" step="1" placeholder="25000"></label><label>Số lượng tồn<input id="product-stock" type="number" required min="0" max="1000000" step="1" placeholder="20"></label></div><p class="form-error" id="product-error" role="alert"></p><div class="modal-actions"><button type="button" class="button button-outline" data-close="product-modal">Hủy</button><button class="button button-primary" type="submit">Lưu sản phẩm</button></div></form></div>
+    <div class="modal-backdrop" id="discount-modal" hidden><form class="modal modal-small" id="discount-form"><div class="modal-heading"><div><span class="eyebrow">ƯU ĐÃI</span><h2>Mã giảm giá</h2></div><button type="button" class="modal-close" data-close="discount-modal" aria-label="Đóng">×</button></div><label>Phần trăm giảm<input id="discount-rate" type="number" min="0" max="100" step="1" value="0" required></label><p class="form-hint">Nhập 0 để bỏ giảm giá. Giảm giá được trừ trước thuế.</p><div class="modal-actions"><button type="button" class="button button-outline" data-close="discount-modal">Hủy</button><button class="button button-primary" type="submit">Áp dụng</button></div></form></div>
+    <div class="modal-backdrop" id="receipt-modal" hidden><div class="modal receipt-modal"><div class="receipt-head"><div class="brand-mark">c.</div><button type="button" class="modal-close" data-close="receipt-modal" aria-label="Đóng">×</button></div><div id="receipt-content"></div><div class="modal-actions no-print"><button class="button button-outline" data-close="receipt-modal">Đóng</button><button class="button button-primary" id="print-receipt">In hóa đơn</button></div></div></div>
+    <div class="toast" id="toast" role="status"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>
